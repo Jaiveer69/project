@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Air Quality Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Air Quality Dashboard</h1>
+            <p class="subtitle">Real-time air quality monitoring and analysis</p>
+        </header>
+
+        <main>
+            <section>
+                <h2 class="section-title">Air Quality Distribution</h2>
+                <div class="grid-container">
+                    <div class="card">
+                        <h3>Air Quality by City</h3>
+                        <div id="cities_chart"></div>
+                    </div>
+
+                    <div class="card">
+                        <h3>Air Quality Categories</h3>
+                        <div id="categories_chart"></div>
+                    </div>
+                </div>
+            </section>
+
+            <section>
+                <h2 class="section-title">Pollutant Analysis</h2>
+                <div class="grid-container">
+                    <div class="card">
+                        <h3>PM2.5 Monthly Trend</h3>
+                        <div id="pm25_chart"></div>
+                    </div>
+
+                    <div class="card">
+                        <h3>Pollutant Outlier Detection</h3>
+                        <div id="outliers_chart"></div>
+                    </div>
+                </div>
+            </section>
+
+            <section>
+                <h2 class="section-title">Detailed Analysis</h2>
+                <div class="full-width-card card">
+                    <h3>Air Quality Measures Summary</h3>
+                    <div id="stats_table"></div>
+                </div>
+
+                <div class="full-width-card card">
+                    <h3>Pollutant Correlation</h3>
+                    <div id="heatmap_chart"></div>
+                </div>
+            </section>
+        </main>
+
+        <footer>
+            <p>Data updated daily | Last updated: <span id="last-updated"></span></p>
+        </footer>
+    </div>
+
+    <!-- Data elements -->
+    <div id="chart-data" style="display:none">
+        <div id="cities-data">{{ graphJSON.cities|safe }}</div>
+        <div id="outliers-data">{{ graphJSON.outliers|safe }}</div>
+        <div id="pm25-data">{{ graphJSON.pm25|safe }}</div>
+        <div id="heatmap-data">{{ graphJSON.heatmap|safe }}</div>
+        <div id="categories-data">{{ graphJSON.categories|safe }}</div>
+        <div id="stats-data">{{ graphJSON.stats|safe }}</div>
+    </div>
+
+    <script>
+        // Get chart data
+        var cities_data = document.getElementById('cities-data').textContent;
+        var outliers_data = document.getElementById('outliers-data').textContent;
+        var pm25_data = document.getElementById('pm25-data').textContent;
+        var heatmap_data = document.getElementById('heatmap-data').textContent;
+        var categories_data = document.getElementById('categories-data').textContent;
+        var stats_data = document.getElementById('stats-data').textContent;
+        
+        // Create the charts
+        Plotly.newPlot('cities_chart', JSON.parse(cities_data));
+        Plotly.newPlot('outliers_chart', JSON.parse(outliers_data));
+        Plotly.newPlot('pm25_chart', JSON.parse(pm25_data));
+        Plotly.newPlot('heatmap_chart', JSON.parse(heatmap_data));
+        Plotly.newPlot('categories_chart', JSON.parse(categories_data));
+        Plotly.newPlot('stats_table', JSON.parse(stats_data));
+        
+        document.getElementById('last-updated').textContent = new Date().toLocaleDateString();
+    </script>
+</body>
+</html> 
